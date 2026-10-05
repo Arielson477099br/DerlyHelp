@@ -1,0 +1,2067 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="DerlyHelp: ajuda simples para tarefas, lembretes, contatos e anotações.">
+  <title>DerlyHelp — Ajuda simples para o seu dia</title>
+
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+  <style>
+    /* =========================================================
+       DERLYHELP — ESTILO
+       - Alto contraste
+       - Fonte grande
+       - Áreas de toque grandes
+       - Sem dependências externas
+       ========================================================= */
+
+    :root {
+      --bg: #ffffff;
+      --surface: #ffffff;
+      --surface-soft: #f4f4f4;
+      --text: #000000;
+      --muted: #222222;
+      --border: #000000;
+      --inverse: #000000;
+      --inverse-text: #ffffff;
+      --focus: #0057ff;
+      --danger: #000000;
+      --danger-text: #ffffff;
+      --success: #000000;
+      --font-scale: 1;
+      --radius: 14px;
+      --shadow: 0 3px 0 rgba(0,0,0,.12);
+    }
+
+    body.dark {
+      --bg: #000000;
+      --surface: #000000;
+      --surface-soft: #111111;
+      --text: #ffffff;
+      --muted: #ffffff;
+      --border: #ffffff;
+      --inverse: #ffffff;
+      --inverse-text: #000000;
+      --focus: #7ab3ff;
+      --danger: #ffffff;
+      --danger-text: #000000;
+      --success: #ffffff;
+      --shadow: 0 3px 0 rgba(255,255,255,.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: calc(16px * var(--font-scale));
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Verdana, sans-serif;
+      line-height: 1.55;
+      min-width: 320px;
+    }
+
+    body,
+    button,
+    input,
+    textarea {
+      font-size: 1rem;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button,
+    a.button-link {
+      min-height: 56px;
+    }
+
+    button {
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--text);
+      padding: 12px 18px;
+      cursor: pointer;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: transform .12s ease, background .12s ease, color .12s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button:focus-visible,
+    a:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible,
+    select:focus-visible {
+      outline: 4px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    .btn-primary {
+      background: var(--inverse);
+      color: var(--inverse-text);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: var(--danger-text);
+    }
+
+    .btn-small {
+      min-height: 48px;
+      padding: 10px 14px;
+    }
+
+    .icon {
+      font-size: 1.45em;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    a.button-link {
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 18px;
+      background: var(--surface);
+      color: var(--text);
+      font-weight: 700;
+      box-shadow: var(--shadow);
+    }
+
+    .sr-only {
+      position: absolute !important;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .skip-link {
+      position: fixed;
+      left: 10px;
+      top: 10px;
+      z-index: 10000;
+      background: var(--inverse);
+      color: var(--inverse-text);
+      border: 2px solid var(--border);
+      padding: 12px 16px;
+      transform: translateY(-200%);
+      border-radius: 10px;
+      font-weight: 700;
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      background: var(--surface);
+      border-bottom: 3px solid var(--border);
+    }
+
+    .topbar {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr 1.8fr;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(1.7rem, 3vw, 2.3rem);
+      letter-spacing: -.03em;
+    }
+
+    .brand p {
+      margin: 3px 0 0;
+      font-size: .95em;
+      font-weight: 700;
+    }
+
+    .datetime {
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      text-align: center;
+      background: var(--surface-soft);
+    }
+
+    .clock {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: .03em;
+    }
+
+    .date {
+      margin-top: 5px;
+      font-weight: 700;
+    }
+
+    .access-tools {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .access-tools button {
+      min-height: 58px;
+      padding: 8px;
+    }
+
+    .site-main {
+      width: min(1400px, 100%);
+      margin: 0 auto;
+      padding: 22px 16px 150px;
+    }
+
+    .welcome {
+      border: 3px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      margin-bottom: 20px;
+      background: var(--surface);
+    }
+
+    .welcome h2 {
+      margin: 0 0 6px;
+      font-size: clamp(1.7rem, 3vw, 2.2rem);
+    }
+
+    .welcome p {
+      margin: 0;
+      max-width: 900px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .summary-card {
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      background: var(--surface);
+      min-height: 150px;
+    }
+
+    .summary-card .summary-label {
+      display: block;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .summary-card strong {
+      font-size: 1.45rem;
+    }
+
+    .section {
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin: 20px 0;
+      background: var(--surface);
+      scroll-margin-top: 130px;
+    }
+
+    .section-header {
+      display: flex;
+      gap: 14px;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: clamp(1.45rem, 3vw, 2rem);
+    }
+
+    .section-lead {
+      margin: 5px 0 0;
+      font-weight: 700;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: 800;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      min-height: 56px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--text);
+      padding: 12px 14px;
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    .help-text {
+      margin: 6px 0 0;
+      font-size: .92em;
+      font-weight: 700;
+    }
+
+    .actions-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .empty-state {
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 18px;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .task-item,
+    .contact-card,
+    .med-card {
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      background: var(--surface-soft);
+    }
+
+    .task-item {
+      display: grid;
+      grid-template-columns: 58px 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .check-btn {
+      width: 58px;
+      min-height: 58px;
+      padding: 0;
+      border-radius: 50%;
+      font-size: 1.5rem;
+    }
+
+    .task-item.completed .task-text {
+      text-decoration: line-through;
+      opacity: .7;
+    }
+
+    .task-meta {
+      margin-top: 4px;
+      font-size: .9em;
+      font-weight: 700;
+    }
+
+    .contact-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .contact-card {
+      display: grid;
+      grid-template-columns: 92px 1fr auto;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 92px;
+      height: 92px;
+      border: 3px solid var(--border);
+      border-radius: 50%;
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 900;
+    }
+
+    .contact-name {
+      margin: 0;
+      font-size: 1.35rem;
+    }
+
+    .contact-meta {
+      margin: 4px 0 0;
+      font-weight: 700;
+    }
+
+    .contact-actions {
+      display: grid;
+      gap: 8px;
+      min-width: 170px;
+    }
+
+    .med-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .med-card h4 {
+      margin: 0 0 6px;
+      font-size: 1.2rem;
+    }
+
+    .med-card p {
+      margin: 4px 0;
+    }
+
+    .tag {
+      display: inline-block;
+      border: 2px solid var(--border);
+      border-radius: 99px;
+      padding: 3px 9px;
+      font-weight: 800;
+      font-size: .85em;
+      margin-top: 6px;
+    }
+
+    .search-wrap {
+      margin-bottom: 14px;
+    }
+
+    .quick-links {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .quick-links a {
+      width: 100%;
+    }
+
+    .sos-bar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 900;
+      background: var(--inverse);
+      color: var(--inverse-text);
+      border-top: 3px solid var(--inverse-text);
+      padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+    }
+
+    .sos-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .sos-text strong {
+      display: block;
+      font-size: 1.25rem;
+    }
+
+    .sos-text span {
+      display: block;
+      font-weight: 700;
+      font-size: .92em;
+    }
+
+    .sos-button {
+      background: var(--inverse-text);
+      color: var(--inverse);
+      border-color: var(--inverse-text);
+      min-width: 310px;
+      min-height: 66px;
+      font-size: 1.1rem;
+    }
+
+    .toast {
+      position: fixed;
+      top: 104px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1200;
+      width: min(760px, calc(100% - 24px));
+      background: var(--inverse);
+      color: var(--inverse-text);
+      border: 3px solid var(--inverse-text);
+      border-radius: 14px;
+      padding: 16px;
+      display: none;
+      box-shadow: 0 10px 24px rgba(0,0,0,.22);
+    }
+
+    .toast.show {
+      display: block;
+    }
+
+    .toast strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    dialog {
+      width: min(680px, calc(100% - 22px));
+      border: 3px solid var(--border);
+      border-radius: 16px;
+      background: var(--surface);
+      color: var(--text);
+      padding: 0;
+    }
+
+    dialog::backdrop {
+      background: rgba(0,0,0,.72);
+    }
+
+    .modal-content {
+      padding: 22px;
+    }
+
+    .modal-content h3 {
+      margin-top: 0;
+      font-size: 1.7rem;
+    }
+
+    .modal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .status-box {
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 14px;
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+
+    .notice {
+      border-left: 8px solid var(--border);
+      padding: 12px 14px;
+      background: var(--surface-soft);
+      margin-top: 12px;
+      font-weight: 700;
+    }
+
+    .footer {
+      margin-top: 30px;
+      text-align: center;
+      font-size: .9em;
+      font-weight: 700;
+    }
+
+    @media (max-width: 1100px) {
+      .topbar {
+        grid-template-columns: 1fr;
+      }
+      .access-tools {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .summary-grid,
+      .quick-links {
+        grid-template-columns: 1fr;
+      }
+
+      .grid-2,
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .full {
+        grid-column: auto;
+      }
+
+      .contact-card {
+        grid-template-columns: 84px 1fr;
+      }
+
+      .contact-actions {
+        grid-column: 1 / -1;
+        grid-template-columns: 1fr 1fr;
+        min-width: 0;
+      }
+
+      .sos-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .sos-button {
+        min-width: 0;
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 620px) {
+      html {
+        font-size: calc(15px * var(--font-scale));
+      }
+
+      .site-main {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .site-header {
+        position: static;
+      }
+
+      .access-tools {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .section,
+      .welcome {
+        padding: 15px;
+      }
+
+      .section-header {
+        flex-direction: column;
+      }
+
+      .task-item {
+        grid-template-columns: 52px 1fr;
+      }
+
+      .task-item > .task-remove {
+        grid-column: 1 / -1;
+        width: 100%;
+      }
+
+      .contact-card {
+        grid-template-columns: 70px 1fr;
+      }
+
+      .avatar {
+        width: 70px;
+        height: 70px;
+        font-size: 1.6rem;
+      }
+
+      .contact-actions {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+      button {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <!-- Cabeçalho fixo com marca, relógio, data e controles permanentes. -->
+  <header class="site-header">
+    <div class="topbar">
+      <div class="brand">
+        <h1>DerlyHelp</h1>
+        <p>Ajuda simples para o seu dia.</p>
+      </div>
+
+      <div class="datetime" aria-live="polite">
+        <div class="clock" id="clock">--:--</div>
+        <div class="date" id="date">Carregando data...</div>
+      </div>
+
+      <div class="access-tools" aria-label="Controles de acessibilidade">
+        <button id="fontMinus" type="button" title="Diminuir tamanho da letra">
+          <span class="icon" aria-hidden="true">A−</span>
+          <span>Diminuir letra</span>
+        </button>
+
+        <button id="fontPlus" type="button" title="Aumentar tamanho da letra">
+          <span class="icon" aria-hidden="true">A+</span>
+          <span>Aumentar letra</span>
+        </button>
+
+        <button id="themeToggle" type="button" title="Alternar tema">
+          <span class="icon" aria-hidden="true">◐</span>
+          <span id="themeLabel">Tema escuro</span>
+        </button>
+
+        <button id="speakPage" type="button" class="btn-primary" title="Ouvir a página">
+          <span class="icon" aria-hidden="true">▶</span>
+          <span id="speakPageLabel">Ouvir página</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="conteudo" class="site-main">
+    <!-- Mensagem inicial. -->
+    <section class="welcome" aria-labelledby="titulo-bem-vindo">
+      <h2 id="titulo-bem-vindo">Bom dia. Vamos cuidar do seu dia.</h2>
+      <p>
+        Aqui você encontra sua hora, tarefas, lembretes, contatos e anotações.
+        Os textos são grandes e os botões são simples.
+      </p>
+      <div class="actions-row">
+        <button id="hearTime" type="button" class="btn-primary">
+          <span class="icon" aria-hidden="true">◷</span>
+          Ouvir hora e data
+        </button>
+        <button id="stopSpeech" type="button">
+          <span class="icon" aria-hidden="true">■</span>
+          Parar de ouvir
+        </button>
+      </div>
+      <div id="globalStatus" class="status-box" role="status" aria-live="polite">
+        DerlyHelp está pronto para ajudar.
+      </div>
+    </section>
+
+    <!-- Visão rápida do dia. -->
+    <section class="summary-grid" aria-label="Visão rápida do dia">
+      <article class="summary-card">
+        <span class="summary-label">Tarefas pendentes</span>
+        <strong id="summaryTasks">0</strong>
+        <p>Coisas que ainda precisam ser feitas.</p>
+      </article>
+
+      <article class="summary-card">
+        <span class="summary-label">Próximo lembrete</span>
+        <strong id="summaryNextReminder">Nenhum</strong>
+        <p id="summaryReminderDetails">Você ainda não registrou um horário.</p>
+      </article>
+
+      <article class="summary-card">
+        <span class="summary-label">Contato principal</span>
+        <strong id="summaryContact">Não definido</strong>
+        <p>Use o botão de ligação rápida abaixo.</p>
+      </article>
+    </section>
+
+    <!-- Atalhos simples para reduzir a navegação. -->
+    <section class="section" aria-labelledby="atalhos">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title" id="atalhos">Acesso rápido</h2>
+          <p class="section-lead">Toque uma vez para ir direto ao que você precisa.</p>
+        </div>
+      </div>
+
+      <div class="quick-links">
+        <a class="button-link" href="#tarefas">
+          <span class="icon" aria-hidden="true">✓</span> Minhas tarefas
+        </a>
+        <a class="button-link" href="#medicamentos">
+          <span class="icon" aria-hidden="true">+</span> Meus medicamentos
+        </a>
+        <a class="button-link" href="#ajuda">
+          <span class="icon" aria-hidden="true">?</span> Preciso de ajuda
+        </a>
+      </div>
+    </section>
+
+    <!-- Tarefas -->
+    <section id="tarefas" class="section" aria-labelledby="titulo-tarefas">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title" id="titulo-tarefas">Minhas tarefas</h2>
+          <p class="section-lead">Veja o que precisa ser feito hoje.</p>
+        </div>
+        <button id="speakTasks" type="button">
+          <span class="icon" aria-hidden="true">▶</span>
+          Ouvir tarefas
+        </button>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <div class="form-grid">
+            <div class="full">
+              <label for="taskText">Nova tarefa</label>
+              <input id="taskText" type="text" maxlength="120" placeholder="Ex.: Ir ao mercado">
+            </div>
+            <div>
+              <label for="taskDate">Dia</label>
+              <input id="taskDate" type="date">
+            </div>
+            <div>
+              <label for="taskTime">Hora do lembrete (opcional)</label>
+              <input id="taskTime" type="time">
+            </div>
+          </div>
+          <div class="actions-row">
+            <button id="addTask" type="button" class="btn-primary">
+              <span class="icon" aria-hidden="true">+</span> Adicionar tarefa
+            </button>
+          </div>
+          <div class="notice">
+            O lembrete pode emitir um som e falar o nome da tarefa quando chegar o horário.
+          </div>
+        </div>
+
+        <div>
+          <div id="taskList" class="list" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contatos -->
+    <section id="contatos" class="section" aria-labelledby="titulo-contatos">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title" id="titulo-contatos">Contatos importantes</h2>
+          <p class="section-lead">Telefone e mensagem ficam visíveis e fáceis de tocar.</p>
+        </div>
+        <button id="speakContacts" type="button">
+          <span class="icon" aria-hidden="true">▶</span>
+          Ouvir contatos
+        </button>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <div class="form-grid">
+            <div class="full">
+              <label for="contactName">Nome</label>
+              <input id="contactName" type="text" maxlength="80" placeholder="Ex.: Maria">
+            </div>
+            <div class="full">
+              <label for="contactPhone">Telefone</label>
+              <input id="contactPhone" type="tel" inputmode="tel" maxlength="30" placeholder="Ex.: (54) 99999-9999">
+            </div>
+          </div>
+          <div class="actions-row">
+            <button id="addContact" type="button" class="btn-primary">
+              <span class="icon" aria-hidden="true">+</span> Adicionar contato
+            </button>
+          </div>
+          <div class="notice">
+            O telefone é salvo apenas neste navegador, usando o armazenamento local do aparelho.
+          </div>
+        </div>
+
+        <div id="contactList" class="contact-list" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- Medicamentos -->
+    <section id="medicamentos" class="section" aria-labelledby="titulo-medicamentos">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title" id="titulo-medicamentos">Medicamentos sem receita</h2>
+          <p class="section-lead">Exemplos comuns para consulta rápida. Não há indicação de dose.</p>
+        </div>
+        <button id="speakSafeUse" type="button">
+          <span class="icon" aria-hidden="true">▶</span>
+          Ouvir instruções gerais
+        </button>
+      </div>
+
+      <div class="notice">
+        Esta área serve para registro e consulta simples. A venda livre pode variar conforme o país,
+        o medicamento e as regras locais. Sempre leia a embalagem e confirme com um farmacêutico.
+        Este site não recomenda doses nem substitui orientação profissional.
+      </div>
+
+      <div class="search-wrap">
+        <label for="medSearch">Buscar por nome ou sintoma</label>
+        <input id="medSearch" type="search" placeholder="Ex.: dor de cabeça, azia, febre, inflamação">
+      </div>
+
+      <div id="medList" class="med-list" aria-live="polite"></div>
+
+      <hr style="margin:24px 0;border:0;border-top:2px solid var(--border);">
+
+      <div class="grid-2">
+        <div>
+          <h3>Meus próximos horários</h3>
+          <p>
+            Você pode registrar o medicamento e o horário que prefere lembrar.
+            O horário aqui é apenas uma anotação pessoal.
+          </p>
+
+          <div class="form-grid">
+            <div class="full">
+              <label for="medName">Nome do medicamento</label>
+              <input id="medName" type="text" maxlength="100" placeholder="Ex.: Meu medicamento">
+            </div>
+            <div>
+              <label for="medTime">Meu horário preferido</label>
+              <input id="medTime" type="time">
+            </div>
+            <div>
+              <label for="medNote">Minha anotação</label>
+              <input id="medNote" type="text" maxlength="120" placeholder="Ex.: depois do almoço">
+            </div>
+          </div>
+
+          <div class="actions-row">
+            <button id="addMedReminder" type="button" class="btn-primary">
+              <span class="icon" aria-hidden="true">+</span> Salvar horário
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <h3>Horários anotados</h3>
+          <div id="medReminderList" class="list" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <hr style="margin:24px 0;border:0;border-top:2px solid var(--border);">
+
+      <div>
+        <h3>Meus medicamentos atuais</h3>
+        <p>
+          Use este espaço apenas como registro pessoal do que você já está usando.
+          Não informe doses aqui. Para dúvidas, fale com um profissional de saúde.
+        </p>
+
+        <label for="currentMeds">Anotações</label>
+        <textarea id="currentMeds" maxlength="2500" placeholder="Ex.: Medicamento A; Medicamento B; medicamento que o médico passou..."></textarea>
+
+        <div class="actions-row">
+          <button id="saveCurrentMeds" type="button" class="btn-primary">
+            <span class="icon" aria-hidden="true">✓</span> Salvar meu registro
+          </button>
+          <button id="speakCurrentMeds" type="button">
+            <span class="icon" aria-hidden="true">▶</span>
+            Ouvir meu registro
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ajuda agora -->
+    <section id="ajuda" class="section" aria-labelledby="titulo-ajuda">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title" id="titulo-ajuda">Preciso de ajuda agora</h2>
+          <p class="section-lead">Use o contato principal para falar com alguém de confiança.</p>
+        </div>
+      </div>
+
+      <div class="status-box">
+        <strong id="mainContactMessage">Nenhum contato principal foi cadastrado.</strong>
+        <p>O botão abaixo sempre usa o primeiro contato salvo como contato principal.</p>
+      </div>
+
+      <div class="actions-row">
+        <button id="mainCallButton" type="button" class="btn-danger">
+          <span class="icon" aria-hidden="true">☎</span>
+          Ligar para Familiar / Responsável
+        </button>
+      </div>
+    </section>
+
+    <!-- Guia rápido -->
+    <section id="como-usar" class="section" aria-labelledby="titulo-como-usar">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title" id="titulo-como-usar">Como usar este site</h2>
+          <p class="section-lead">Um guia curto, com texto e áudio.</p>
+        </div>
+        <button id="speakGuide" type="button">
+          <span class="icon" aria-hidden="true">▶</span>
+          Ouvir como usar
+        </button>
+      </div>
+
+      <div class="notice">
+        <p><strong>1.</strong> Veja a hora e a data no topo.</p>
+        <p><strong>2.</strong> Adicione tarefas e, se desejar, um horário para lembrar.</p>
+        <p><strong>3.</strong> Cadastre pessoas importantes e use o botão de ligação.</p>
+        <p><strong>4.</strong> Procure medicamentos pelo nome ou por um sintoma.</p>
+        <p><strong>5.</strong> Escreva uma anotação pessoal e use o botão para ouvir.</p>
+        <p><strong>6.</strong> Use “Aumentar letra” ou “Diminuir letra” quando precisar.</p>
+        <p><strong>7.</strong> Use “Tema escuro” para trocar o contraste da tela.</p>
+      </div>
+    </section>
+
+    <!-- Anotações -->
+    <section id="anotacoes" class="section" aria-labelledby="titulo-anotacoes">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title" id="titulo-anotacoes">Minhas anotações</h2>
+          <p class="section-lead">Escreva coisas importantes para lembrar depois.</p>
+        </div>
+        <button id="speakNote" type="button">
+          <span class="icon" aria-hidden="true">▶</span>
+          Ouvir anotação
+        </button>
+      </div>
+
+      <label for="personalNote">Minha anotação pessoal</label>
+      <textarea id="personalNote" maxlength="5000" placeholder="Ex.: O que o médico disse hoje..."></textarea>
+
+      <div class="actions-row">
+        <button id="saveNote" type="button" class="btn-primary">
+          <span class="icon" aria-hidden="true">✓</span>
+          Salvar anotação
+        </button>
+        <button id="clearNote" type="button" class="btn-danger">
+          <span class="icon" aria-hidden="true">×</span>
+          Apagar anotação
+        </button>
+      </div>
+    </section>
+
+    <p class="footer">
+      DerlyHelp funciona offline. As informações ficam salvas somente neste navegador.
+    </p>
+  </main>
+
+  <!-- Barra de ligação rápida sempre visível. -->
+  <aside class="sos-bar" aria-label="Contato rápido">
+    <div class="sos-inner">
+      <div class="sos-text">
+        <strong>Precisa de alguém agora?</strong>
+        <span>Use o contato principal salvo no DerlyHelp.</span>
+      </div>
+      <button id="bottomCallButton" type="button" class="sos-button">
+        <span class="icon" aria-hidden="true">☎</span>
+        Ligar para Familiar / Responsável
+      </button>
+    </div>
+  </aside>
+
+  <!-- Mensagens de confirmação. -->
+  <div id="toast" class="toast" role="status" aria-live="assertive"></div>
+
+  <!-- Janela de confirmação de ligação. -->
+  <dialog id="callDialog" aria-labelledby="callDialogTitle">
+    <div class="modal-content">
+      <h3 id="callDialogTitle">Confirmar ligação</h3>
+      <p id="callDialogText">Você está ligando para alguém. Confirma?</p>
+      <div class="modal-actions">
+        <button id="confirmCall" type="button" class="btn-primary">
+          <span class="icon" aria-hidden="true">☎</span>
+          Sim, ligar
+        </button>
+        <button id="cancelCall" type="button">
+          <span class="icon" aria-hidden="true">×</span>
+          Não, voltar
+        </button>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    /* =========================================================
+       DERLYHELP — JAVASCRIPT
+       - LocalStorage para persistência
+       - Web Speech API para leitura em voz alta
+       - Lembretes por tempo
+       - Renderização das listas
+       ========================================================= */
+
+    const STORAGE = {
+      fontScale: "derlyhelp_font_scale",
+      theme: "derlyhelp_theme",
+      tasks: "derlyhelp_tasks",
+      contacts: "derlyhelp_contacts",
+      medReminders: "derlyhelp_med_reminders",
+      currentMeds: "derlyhelp_current_meds",
+      note: "derlyhelp_note",
+      remindersDone: "derlyhelp_reminders_done"
+    };
+
+    const state = {
+      fontScale: parseFloat(localStorage.getItem(STORAGE.fontScale)) || 1,
+      theme: localStorage.getItem(STORAGE.theme) || "light",
+      tasks: loadJson(STORAGE.tasks, []),
+      contacts: loadJson(STORAGE.contacts, []),
+      medReminders: loadJson(STORAGE.medReminders, []),
+      currentMeds: localStorage.getItem(STORAGE.currentMeds) || "",
+      note: localStorage.getItem(STORAGE.note) || "",
+      remindersDone: loadJson(STORAGE.remindersDone, {})
+    };
+
+    const otcExamples = [
+      {
+        name: "Paracetamol",
+        symptoms: "dor de cabeça, dor leve, febre",
+        note: "Exemplo para consulta. Não apresenta dose nem indicação personalizada."
+      },
+      {
+        name: "Dipirona",
+        symptoms: "dor, febre",
+        note: "Exemplo para consulta. Confirme na embalagem e com um farmacêutico."
+      },
+      {
+        name: "Ibuprofeno",
+        symptoms: "dor, febre, inflamação",
+        note: "Exemplo para consulta. A adequação depende da pessoa e do contexto de saúde."
+      },
+      {
+        name: "Carbonato de cálcio",
+        symptoms: "azia, queimação, desconforto por acidez",
+        note: "Exemplo de antiácido. Leia a embalagem e confirme com um farmacêutico."
+      }
+    ];
+
+    const els = {
+      body: document.body,
+      clock: document.getElementById("clock"),
+      date: document.getElementById("date"),
+      fontMinus: document.getElementById("fontMinus"),
+      fontPlus: document.getElementById("fontPlus"),
+      themeToggle: document.getElementById("themeToggle"),
+      themeLabel: document.getElementById("themeLabel"),
+      speakPage: document.getElementById("speakPage"),
+      speakPageLabel: document.getElementById("speakPageLabel"),
+      stopSpeech: document.getElementById("stopSpeech"),
+      hearTime: document.getElementById("hearTime"),
+      globalStatus: document.getElementById("globalStatus"),
+      taskText: document.getElementById("taskText"),
+      taskDate: document.getElementById("taskDate"),
+      taskTime: document.getElementById("taskTime"),
+      addTask: document.getElementById("addTask"),
+      taskList: document.getElementById("taskList"),
+      speakTasks: document.getElementById("speakTasks"),
+      contactName: document.getElementById("contactName"),
+      contactPhone: document.getElementById("contactPhone"),
+      addContact: document.getElementById("addContact"),
+      contactList: document.getElementById("contactList"),
+      speakContacts: document.getElementById("speakContacts"),
+      medSearch: document.getElementById("medSearch"),
+      medList: document.getElementById("medList"),
+      speakSafeUse: document.getElementById("speakSafeUse"),
+      medName: document.getElementById("medName"),
+      medTime: document.getElementById("medTime"),
+      medNote: document.getElementById("medNote"),
+      addMedReminder: document.getElementById("addMedReminder"),
+      medReminderList: document.getElementById("medReminderList"),
+      currentMeds: document.getElementById("currentMeds"),
+      saveCurrentMeds: document.getElementById("saveCurrentMeds"),
+      speakCurrentMeds: document.getElementById("speakCurrentMeds"),
+      mainCallButton: document.getElementById("mainCallButton"),
+      bottomCallButton: document.getElementById("bottomCallButton"),
+      mainContactMessage: document.getElementById("mainContactMessage"),
+      speakGuide: document.getElementById("speakGuide"),
+      personalNote: document.getElementById("personalNote"),
+      saveNote: document.getElementById("saveNote"),
+      clearNote: document.getElementById("clearNote"),
+      speakNote: document.getElementById("speakNote"),
+      toast: document.getElementById("toast"),
+      callDialog: document.getElementById("callDialog"),
+      callDialogText: document.getElementById("callDialogText"),
+      confirmCall: document.getElementById("confirmCall"),
+      cancelCall: document.getElementById("cancelCall"),
+      summaryTasks: document.getElementById("summaryTasks"),
+      summaryNextReminder: document.getElementById("summaryNextReminder"),
+      summaryReminderDetails: document.getElementById("summaryReminderDetails"),
+      summaryContact: document.getElementById("summaryContact")
+    };
+
+    let pendingCall = null;
+    let toastTimer = null;
+    let audioContext = null;
+
+    function loadJson(key, fallback) {
+      try {
+        const value = localStorage.getItem(key);
+        return value ? JSON.parse(value) : fallback;
+      } catch {
+        return fallback;
+      }
+    }
+
+    function saveJson(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    function sanitizeText(value) {
+      return String(value ?? "")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function normalizePhone(value) {
+      const raw = String(value ?? "").trim();
+      const digits = raw.replace(/\D/g, "");
+      return digits ? `tel:${digits}` : "#";
+    }
+
+    function initials(name) {
+      const parts = sanitizeText(name).split(" ").filter(Boolean);
+      if (!parts.length) return "?";
+      return parts.slice(0, 2).map(p => p[0].toUpperCase()).join("");
+    }
+
+    function showToast(title, message, speak = false) {
+      els.toast.innerHTML = `<strong>${escapeHtml(title)}</strong><div>${escapeHtml(message)}</div>`;
+      els.toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => els.toast.classList.remove("show"), 4200);
+
+      els.globalStatus.textContent = `${title}. ${message}`;
+      if (speak) speak(`${title}. ${message}`);
+    }
+
+    function applySettings() {
+      document.documentElement.style.setProperty("--font-scale", state.fontScale.toFixed(2));
+      els.body.classList.toggle("dark", state.theme === "dark");
+
+      els.themeLabel.textContent =
+        state.theme === "dark" ? "Tema claro" : "Tema escuro";
+
+      els.speakPageLabel.textContent =
+        "Parar de ouvir" === els.speakPageLabel.textContent
+          ? "Parar de ouvir"
+          : "Ouvir página";
+
+      localStorage.setItem(STORAGE.fontScale, state.fontScale.toString());
+      localStorage.setItem(STORAGE.theme, state.theme);
+    }
+
+    /* -------------------------
+       FALA / TEXT-TO-SPEECH
+       ------------------------- */
+    function speechAvailable() {
+      return "speechSynthesis" in window;
+    }
+
+    function getPortugueseVoice() {
+      if (!speechAvailable()) return null;
+      const voices = window.speechSynthesis.getVoices();
+      return (
+        voices.find(v => /^pt-BR$/i.test(v.lang)) ||
+        voices.find(v => /^pt/i.test(v.lang)) ||
+        voices[0] ||
+        null
+      );
+    }
+
+    function speak(text, options = {}) {
+      if (!speechAvailable()) {
+        showToast("A fala não está disponível", "O navegador deste aparelho não oferece leitura em voz alta.");
+        return;
+      }
+
+      const clean = sanitizeText(text);
+      if (!clean) return;
+
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(clean);
+      utterance.lang = "pt-BR";
+      utterance.rate = options.rate || 0.9;
+      utterance.pitch = 1;
+      utterance.volume = 1;
+
+      const voice = getPortugueseVoice();
+      if (voice) utterance.voice = voice;
+
+      utterance.onstart = () => {
+        els.speakPageLabel.textContent = "Parar de ouvir";
+      };
+
+      utterance.onend = () => {
+        els.speakPageLabel.textContent = "Ouvir página";
+      };
+
+      utterance.onerror = () => {
+        els.speakPageLabel.textContent = "Ouvir página";
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function stopSpeech() {
+      if (speechAvailable()) window.speechSynthesis.cancel();
+      els.speakPageLabel.textContent = "Ouvir página";
+      showToast("Leitura interrompida", "A fala foi parada.");
+    }
+
+    function getPageText() {
+      const important = [
+        `DerlyHelp. Ajuda simples para o seu dia.`,
+        `Agora são ${els.clock.textContent}. ${els.date.textContent}.`,
+        `Tarefas. ${buildTaskSpeech()}`,
+        `Contatos importantes. ${buildContactSpeech()}`,
+        `Medicamentos sem receita. ${otcExamples.map(m => `${m.name}: ${m.symptoms}.`).join(" ")}`,
+        `Como usar este site. Use os botões grandes para navegar, ouvir textos e salvar informações.`,
+        `Minhas anotações. ${state.note || "Nenhuma anotação salva."}`
+      ];
+      return important.join(" ");
+    }
+
+    function buildTaskSpeech() {
+      if (!state.tasks.length) return "Nenhuma tarefa cadastrada.";
+      return state.tasks.map((t, i) =>
+        `${i + 1}. ${t.text}. ${t.completed ? "Concluída." : "Pendente."}${t.date ? ` Dia: ${formatDate(t.date)}.` : ""}${t.time ? ` Lembrete às ${t.time}.` : ""}`
+      ).join(" ");
+    }
+
+    function buildContactSpeech() {
+      if (!state.contacts.length) return "Nenhum contato cadastrado.";
+      return state.contacts.map((c, i) =>
+        `${i + 1}. ${c.name}. Telefone: ${c.phone}.`
+      ).join(" ");
+    }
+
+    function formatDate(dateValue) {
+      if (!dateValue) return "";
+      const d = new Date(`${dateValue}T00:00:00`);
+      return d.toLocaleDateString("pt-BR");
+    }
+
+    function speakSafeUse() {
+      speak(
+        "Instruções gerais de uso seguro. Sempre leia a embalagem. " +
+        "Siga as informações da embalagem e não misture medicamentos sem orientação. " +
+        "Quando tiver dúvida, consulte um farmacêutico ou outro profissional de saúde. " +
+        "Este site não informa doses e não substitui orientação profissional."
+      );
+    }
+
+    /* -------------------------
+       RELÓGIO E DATA
+       ------------------------- */
+    function updateClock() {
+      const now = new Date();
+      els.clock.textContent = now.toLocaleTimeString("pt-BR", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      });
+
+      els.date.textContent = now.toLocaleDateString("pt-BR", {
+        weekday: "long",
+        day: "2-digit",
+        month: "long",
+        year: "numeric"
+      });
+
+      updateSummary();
+      checkReminders(now);
+    }
+
+    function speakDateTime() {
+      const now = new Date();
+      const time = now.toLocaleTimeString("pt-BR", {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+      const date = now.toLocaleDateString("pt-BR", {
+        weekday: "long",
+        day: "2-digit",
+        month: "long",
+        year: "numeric"
+      });
+      speak(`Agora são ${time}. Hoje é ${date}.`);
+    }
+
+    /* -------------------------
+       TAREFAS
+       ------------------------- */
+    function addTask() {
+      const text = sanitizeText(els.taskText.value);
+      const date = els.taskDate.value;
+      const time = els.taskTime.value;
+
+      if (!text) {
+        showToast("Falta uma informação", "Digite o nome da tarefa.");
+        els.taskText.focus();
+        return;
+      }
+
+      state.tasks.push({
+        id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+        text,
+        date: date || new Date().toISOString().slice(0, 10),
+        time: time || "",
+        completed: false
+      });
+
+      saveJson(STORAGE.tasks, state.tasks);
+      els.taskText.value = "";
+      els.taskTime.value = "";
+      renderTasks();
+      showToast("Tarefa salva", `${text} foi adicionada às suas tarefas.`, true);
+    }
+
+    function toggleTask(id) {
+      const task = state.tasks.find(t => t.id === id);
+      if (!task) return;
+
+      task.completed = !task.completed;
+      saveJson(STORAGE.tasks, state.tasks);
+      renderTasks();
+
+      showToast(
+        task.completed ? "Tarefa concluída" : "Tarefa reaberta",
+        task.completed ? `${task.text} foi marcada como concluída.` : `${task.text} voltou para a lista de pendentes.`,
+        true
+      );
+    }
+
+    function deleteTask(id) {
+      const task = state.tasks.find(t => t.id === id);
+      state.tasks = state.tasks.filter(t => t.id !== id);
+      saveJson(STORAGE.tasks, state.tasks);
+      renderTasks();
+
+      if (task) showToast("Tarefa apagada", `${task.text} foi removida.`);
+    }
+
+    function renderTasks() {
+      if (!state.tasks.length) {
+        els.taskList.innerHTML = `<div class="empty-state">Nenhuma tarefa foi adicionada.</div>`;
+        updateSummary();
+        return;
+      }
+
+      const sorted = [...state.tasks].sort((a, b) => {
+        const aKey = `${a.date || ""}T${a.time || "23:59"}`;
+        const bKey = `${b.date || ""}T${b.time || "23:59"}`;
+        return aKey.localeCompare(bKey);
+      });
+
+      els.taskList.innerHTML = sorted.map(task => `
+        <article class="task-item ${task.completed ? "completed" : ""}">
+          <button
+            type="button"
+            class="check-btn"
+            data-action="toggle-task"
+            data-id="${escapeHtml(task.id)}"
+            aria-label="${task.completed ? "Reabrir" : "Concluir"} tarefa ${escapeHtml(task.text)}"
+            title="${task.completed ? "Reabrir tarefa" : "Concluir tarefa"}"
+          >${task.completed ? "✓" : "○"}</button>
+
+          <div>
+            <div class="task-text"><strong>${escapeHtml(task.text)}</strong></div>
+            <div class="task-meta">
+              ${task.date ? `Dia: ${escapeHtml(formatDate(task.date))}` : "Sem data"}
+              ${task.time ? ` | Lembrete: ${escapeHtml(task.time)}` : ""}
+            </div>
+          </div>
+
+          <button
+            type="button"
+            class="task-remove btn-danger btn-small"
+            data-action="delete-task"
+            data-id="${escapeHtml(task.id)}"
+            aria-label="Apagar tarefa ${escapeHtml(task.text)}"
+          >Apagar</button>
+        </article>
+      `).join("");
+
+      updateSummary();
+    }
+
+    function speakTasks() {
+      speak(`Minhas tarefas. ${buildTaskSpeech()}`);
+    }
+
+    /* -------------------------
+       CONTATOS
+       ------------------------- */
+    function addContact() {
+      const name = sanitizeText(els.contactName.value);
+      const phone = sanitizeText(els.contactPhone.value);
+
+      if (!name || !phone) {
+        showToast("Falta uma informação", "Preencha o nome e o telefone.");
+        return;
+      }
+
+      state.contacts.push({
+        id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+        name,
+        phone
+      });
+
+      saveJson(STORAGE.contacts, state.contacts);
+      els.contactName.value = "";
+      els.contactPhone.value = "";
+      renderContacts();
+      showToast("Contato salvo", `${name} foi adicionado.`);
+    }
+
+    function deleteContact(id) {
+      const contact = state.contacts.find(c => c.id === id);
+      state.contacts = state.contacts.filter(c => c.id !== id);
+      saveJson(STORAGE.contacts, state.contacts);
+      renderContacts();
+      if (contact) showToast("Contato apagado", `${contact.name} foi removido.`);
+    }
+
+    function renderContacts() {
+      if (!state.contacts.length) {
+        els.contactList.innerHTML = `<div class="empty-state">Nenhum contato foi cadastrado.</div>`;
+      } else {
+        els.contactList.innerHTML = state.contacts.map(contact => `
+          <article class="contact-card">
+            <div class="avatar" aria-hidden="true">${escapeHtml(initials(contact.name))}</div>
+
+            <div>
+              <h3 class="contact-name">${escapeHtml(contact.name)}</h3>
+              <p class="contact-meta">${escapeHtml(contact.phone)}</p>
+              ${state.contacts[0].id === contact.id ? `<span class="tag">Contato principal</span>` : ""}
+            </div>
+
+            <div class="contact-actions">
+              <button type="button" class="btn-primary"
+                data-action="call-contact" data-id="${escapeHtml(contact.id)}">
+                <span class="icon" aria-hidden="true">☎</span> Ligar
+              </button>
+
+              <a class="button-link"
+                href="sms:${encodeURIComponent(contact.phone)}"
+                aria-label="Enviar mensagem para ${escapeHtml(contact.name)}">
+                <span class="icon" aria-hidden="true">▰</span> Mensagem
+              </a>
+
+              <button type="button" class="btn-small"
+                data-action="delete-contact" data-id="${escapeHtml(contact.id)}">
+                Apagar contato
+              </button>
+            </div>
+          </article>
+        `).join("");
+      }
+
+      updateMainContact();
+      updateSummary();
+    }
+
+    function updateMainContact() {
+      const main = state.contacts[0];
+
+      if (!main) {
+        els.mainContactMessage.textContent = "Nenhum contato principal foi cadastrado.";
+        els.mainCallButton.disabled = true;
+        els.bottomCallButton.disabled = true;
+      } else {
+        els.mainContactMessage.textContent = `Contato principal: ${main.name} — ${main.phone}.`;
+        els.mainCallButton.disabled = false;
+        els.bottomCallButton.disabled = false;
+      }
+    }
+
+    function beginCall(id) {
+      const contact = state.contacts.find(c => c.id === id);
+      if (!contact) return;
+
+      pendingCall = contact;
+      const text = `Você está ligando para ${contact.name}. Confirma?`;
+
+      els.callDialogText.textContent = text;
+
+      if (typeof els.callDialog.showModal === "function") {
+        els.callDialog.showModal();
+      } else {
+        const ok = window.confirm(text);
+        if (ok) performCall(contact);
+      }
+
+      speak(text);
+    }
+
+    function performCall(contact) {
+      if (!contact) return;
+
+      const spoken = `Ligando para ${contact.name}.`;
+      speak(spoken);
+
+      showToast("Ligação iniciada", `Você escolheu ligar para ${contact.name}.`, false);
+
+      const href = normalizePhone(contact.phone);
+      if (href !== "#") {
+        window.location.href = href;
+      }
+
+      pendingCall = null;
+    }
+
+    /* -------------------------
+       MEDICAMENTOS DE EXEMPLO
+       ------------------------- */
+    function renderMedications(query = "") {
+      const q = sanitizeText(query).toLowerCase();
+
+      const list = otcExamples.filter(m =>
+        !q ||
+        m.name.toLowerCase().includes(q) ||
+        m.symptoms.toLowerCase().includes(q)
+      );
+
+      if (!list.length) {
+        els.medList.innerHTML = `<div class="empty-state">Nenhum exemplo encontrado. Tente outro nome ou sintoma.</div>`;
+        return;
+      }
+
+      els.medList.innerHTML = list.map(m => `
+        <article class="med-card">
+          <h4>${escapeHtml(m.name)}</h4>
+          <p><strong>Relacionado a:</strong> ${escapeHtml(m.symptoms)}</p>
+          <p>${escapeHtml(m.note)}</p>
+          <button type="button" class="btn-small" data-action="speak-med"
+            data-name="${escapeHtml(m.name)}"
+            data-symptoms="${escapeHtml(m.symptoms)}">
+            <span class="icon" aria-hidden="true">▶</span> Ouvir
+          </button>
+        </article>
+      `).join("");
+    }
+
+    function addMedReminder() {
+      const name = sanitizeText(els.medName.value);
+      const time = sanitizeText(els.medTime.value);
+      const note = sanitizeText(els.medNote.value);
+
+      if (!name || !time) {
+        showToast("Falta uma informação", "Preencha o nome e o horário.");
+        return;
+      }
+
+      state.medReminders.push({
+        id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+        name,
+        time,
+        note
+      });
+
+      saveJson(STORAGE.medReminders, state.medReminders);
+      els.medName.value = "";
+      els.medTime.value = "";
+      els.medNote.value = "";
+      renderMedReminders();
+      showToast("Horário salvo", `Lembrete para ${name} às ${time}.`);
+    }
+
+    function deleteMedReminder(id) {
+      const item = state.medReminders.find(m => m.id === id);
+      state.medReminders = state.medReminders.filter(m => m.id !== id);
+      saveJson(STORAGE.medReminders, state.medReminders);
+      renderMedReminders();
+      if (item) showToast("Lembrete apagado", `O horário de ${item.name} foi removido.`);
+    }
+
+    function renderMedReminders() {
+      if (!state.medReminders.length) {
+        els.medReminderList.innerHTML = `<div class="empty-state">Nenhum horário anotado.</div>`;
+        updateSummary();
+        return;
+      }
+
+      const sorted = [...state.medReminders].sort((a, b) => a.time.localeCompare(b.time));
+
+      els.medReminderList.innerHTML = sorted.map(item => `
+        <article class="task-item">
+          <div class="check-btn" aria-hidden="true">◷</div>
+          <div>
+            <strong>${escapeHtml(item.name)}</strong>
+            <div class="task-meta">Horário: ${escapeHtml(item.time)}${item.note ? ` | ${escapeHtml(item.note)}` : ""}</div>
+          </div>
+          <button type="button" class="task-remove btn-small btn-danger"
+            data-action="delete-med-reminder"
+            data-id="${escapeHtml(item.id)}">Apagar</button>
+        </article>
+      `).join("");
+
+      updateSummary();
+    }
+
+    /* -------------------------
+       REGISTROS PESSOAIS
+       ------------------------- */
+    function saveCurrentMeds() {
+      state.currentMeds = els.currentMeds.value.slice(0, 2500);
+      localStorage.setItem(STORAGE.currentMeds, state.currentMeds);
+      showToast("Registro salvo", "Seu registro pessoal de medicamentos foi salvo.");
+    }
+
+    function saveNote() {
+      state.note = els.personalNote.value.slice(0, 5000);
+      localStorage.setItem(STORAGE.note, state.note);
+      showToast("Anotação salva", "Sua anotação pessoal foi salva.");
+    }
+
+    function clearNote() {
+      if (!state.note && !els.personalNote.value) {
+        showToast("Nada para apagar", "Não há anotação salva.");
+        return;
+      }
+
+      state.note = "";
+      els.personalNote.value = "";
+      localStorage.removeItem(STORAGE.note);
+      showToast("Anotação apagada", "Sua anotação foi removida.");
+    }
+
+    /* -------------------------
+       RESUMO DO DIA
+       ------------------------- */
+    function updateSummary() {
+      const pending = state.tasks.filter(t => !t.completed).length;
+      els.summaryTasks.textContent = String(pending);
+
+      const reminders = [
+        ...state.medReminders.map(r => ({ time: r.time, label: r.name })),
+        ...state.tasks
+          .filter(t => !t.completed && t.time)
+          .map(t => ({ time: t.time, label: t.text }))
+      ].sort((a, b) => a.time.localeCompare(b.time));
+
+      if (reminders.length) {
+        els.summaryNextReminder.textContent = reminders[0].time;
+        els.summaryReminderDetails.textContent = reminders[0].label;
+      } else {
+        els.summaryNextReminder.textContent = "Nenhum";
+        els.summaryReminderDetails.textContent = "Você ainda não registrou um horário.";
+      }
+
+      const main = state.contacts[0];
+      els.summaryContact.textContent = main ? main.name : "Não definido";
+    }
+
+    /* -------------------------
+       LEMBRETES SONOROS E VISUAIS
+       ------------------------- */
+    function beep() {
+      try {
+        audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+
+        oscillator.type = "sine";
+        oscillator.frequency.value = 880;
+        gain.gain.value = 0.05;
+
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + 0.35);
+      } catch {
+        // Alguns navegadores bloqueiam áudio até uma interação. A fala ainda pode funcionar.
+      }
+    }
+
+    function reminderKey(kind, id, date) {
+      return `${kind}:${id}:${date}`;
+    }
+
+    function checkReminders(now) {
+      const hhmm = now.toTimeString().slice(0, 5);
+      const yyyyMMdd = now.toISOString().slice(0, 10);
+
+      let changed = false;
+      for (const task of state.tasks) {
+        if (
+          !task.completed &&
+          task.time &&
+          task.time === hhmm &&
+          (!task.date || task.date === yyyyMMdd)
+        ) {
+          const key = reminderKey("task", task.id, yyyyMMdd);
+          if (!state.remindersDone[key]) {
+            triggerReminder(`Lembrete de tarefa`, task.text, key);
+            changed = true;
+          }
+        }
+      }
+
+      for (const med of state.medReminders) {
+        if (med.time === hhmm) {
+          const key = reminderKey("med", med.id, yyyyMMdd);
+          if (!state.remindersDone[key]) {
+            triggerReminder(`Lembrete de horário`, med.name, key, med.note);
+            changed = true;
+          }
+        }
+      }
+
+      if (changed) {
+        saveJson(STORAGE.remindersDone, state.remindersDone);
+      }
+
+      /* Mantém o objeto leve: remove registros com mais de 14 dias. */
+      const threshold = new Date(now);
+      threshold.setDate(threshold.getDate() - 14);
+      const thresholdKey = threshold.toISOString().slice(0, 10);
+
+      for (const key of Object.keys(state.remindersDone)) {
+        const datePart = key.split(":").pop();
+        if (datePart < thresholdKey) {
+          delete state.remindersDone[key];
+        }
+      }
+    }
+
+    function triggerReminder(title, item, key, note = "") {
+      state.remindersDone[key] = true;
+      beep();
+
+      const message = note
+        ? `${item}. ${note}.`
+        : `${item}.`;
+
+      showToast(title, message, true);
+    }
+
+    /* -------------------------
+       DELEGAÇÃO DE EVENTOS
+       ------------------------- */
+    els.taskList.addEventListener("click", event => {
+      const btn = event.target.closest("button[data-action]");
+      if (!btn) return;
+
+      const id = btn.dataset.id;
+      if (btn.dataset.action === "toggle-task") toggleTask(id);
+      if (btn.dataset.action === "delete-task") deleteTask(id);
+    });
+
+    els.contactList.addEventListener("click", event => {
+      const btn = event.target.closest("[data-action]");
+      if (!btn) return;
+
+      const id = btn.dataset.id;
+      if (btn.dataset.action === "call-contact") beginCall(id);
+      if (btn.dataset.action === "delete-contact") deleteContact(id);
+    });
+
+    els.medList.addEventListener("click", event => {
+      const btn = event.target.closest("[data-action='speak-med']");
+      if (!btn) return;
+      speak(`${btn.dataset.name}. Relacionado a ${btn.dataset.symptoms}.`);
+    });
+
+    els.medReminderList.addEventListener("click", event => {
+      const btn = event.target.closest("[data-action='delete-med-reminder']");
+      if (!btn) return;
+      deleteMedReminder(btn.dataset.id);
+    });
+
+    /* -------------------------
+       CONTROLES
+       ------------------------- */
+    els.fontMinus.addEventListener("click", () => {
+      state.fontScale = Math.max(0.85, +(state.fontScale - 0.1).toFixed(2));
+      applySettings();
+      showToast("Letra menor", "O tamanho da letra foi reduzido.");
+    });
+
+    els.fontPlus.addEventListener("click", () => {
+      state.fontScale = Math.min(1.7, +(state.fontScale + 0.1).toFixed(2));
+      applySettings();
+      showToast("Letra maior", "O tamanho da letra foi aumentado.");
+    });
+
+    els.themeToggle.addEventListener("click", () => {
+      state.theme = state.theme === "dark" ? "light" : "dark";
+      applySettings();
+
+      const label = state.theme === "dark" ? "Tema escuro" : "Tema claro";
+      showToast("Tema alterado", `Agora você está usando ${label.toLowerCase()}.`);
+    });
+
+    els.speakPage.addEventListener("click", () => {
+      if (speechAvailable() && window.speechSynthesis.speaking) {
+        stopSpeech();
+      } else {
+        speak(getPageText());
+      }
+    });
+
+    els.stopSpeech.addEventListener("click", stopSpeech);
+    els.hearTime.addEventListener("click", speakDateTime);
+    els.speakTasks.addEventListener("click", speakTasks);
+    els.speakContacts.addEventListener("click", () => speak(`Contatos importantes. ${buildContactSpeech()}`));
+    els.speakSafeUse.addEventListener("click", speakSafeUse);
+
+    els.speakGuide.addEventListener("click", () => {
+      speak(
+        "Como usar este site. Veja a hora no topo. " +
+        "Adicione tarefas e horários de lembrete. " +
+        "Cadastre contatos importantes. " +
+        "Procure medicamentos por nome ou sintoma. " +
+        "Escreva suas anotações. " +
+        "Use aumentar ou diminuir letra para ajustar a leitura. " +
+        "Use o tema escuro para trocar o contraste."
+      );
+    });
+
+    els.speakCurrentMeds.addEventListener("click", () => {
+      speak(`Meu registro de medicamentos. ${state.currentMeds || "Nenhum registro foi salvo."}`);
+    });
+
+    els.saveCurrentMeds.addEventListener("click", saveCurrentMeds);
+
+    els.speakNote.addEventListener("click", () => {
+      speak(`Minha anotação. ${state.note || "Nenhuma anotação foi salva."}`);
+    });
+
+    els.saveNote.addEventListener("click", saveNote);
+    els.clearNote.addEventListener("click", clearNote);
+
+    els.addTask.addEventListener("click", addTask);
+    els.addContact.addEventListener("click", addContact);
+    els.addMedReminder.addEventListener("click", addMedReminder);
+
+    els.medSearch.addEventListener("input", () => renderMedications(els.medSearch.value));
+
+    function mainCall() {
+      const main = state.contacts[0];
+      if (!main) {
+        showToast("Nenhum contato principal", "Cadastre um contato na seção Contatos importantes.");
+        document.getElementById("contatos").scrollIntoView({ behavior: "smooth" });
+        return;
+      }
+      beginCall(main.id);
+    }
+
+    els.mainCallButton.addEventListener("click", mainCall);
+    els.bottomCallButton.addEventListener("click", mainCall);
+
+    els.confirmCall.addEventListener("click", () => {
+      if (pendingCall) performCall(pendingCall);
+      if (els.callDialog.open) els.callDialog.close();
+    });
+
+    els.cancelCall.addEventListener("click", () => {
+      const person = pendingCall?.name || "o contato";
+      pendingCall = null;
+      if (els.callDialog.open) els.callDialog.close();
+      speak(`Ligação cancelada. Você não está ligando para ${person}.`);
+      showToast("Ligação cancelada", "Nada foi ligado.");
+    });
+
+    els.callDialog.addEventListener("click", event => {
+      if (event.target === els.callDialog) {
+        els.callDialog.close();
+        pendingCall = null;
+      }
+    });
+
+    /* Enter em campos principais facilita o uso sem precisar procurar o botão. */
+    els.taskText.addEventListener("keydown", e => {
+      if (e.key === "Enter") addTask();
+    });
+
+    els.contactPhone.addEventListener("keydown", e => {
+      if (e.key === "Enter") addContact();
+    });
+
+    els.medTime.addEventListener("keydown", e => {
+      if (e.key === "Enter") addMedReminder();
+    });
+
+    /* -------------------------
+       INICIALIZAÇÃO
+       ------------------------- */
+    function init() {
+      applySettings();
+
+      els.currentMeds.value = state.currentMeds;
+      els.personalNote.value = state.note;
+
+      const today = new Date().toISOString().slice(0, 10);
+      els.taskDate.value = today;
+
+      renderTasks();
+      renderContacts();
+      renderMedications();
+      renderMedReminders();
+      updateMainContact();
+      updateClock();
+
+      setInterval(updateClock, 1000);
+
+      /* Algumas vozes só ficam disponíveis depois da primeira chamada. */
+      if (speechAvailable() && "onvoiceschanged" in window.speechSynthesis) {
+        window.speechSynthesis.onvoiceschanged = () => {};
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>

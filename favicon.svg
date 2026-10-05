@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 64 64"
+     width="64"
+     height="64"
+     role="img"
+     aria-labelledby="derlyhelp-title derlyhelp-desc">
+
+  <title id="derlyhelp-title">DerlyHelp</title>
+  <desc id="derlyhelp-desc">Ícone minimalista de proteção, cuidado e ajuda.</desc>
+
+  <!-- Fundo azul: confiança e segurança -->
+  <rect x="2" y="2" width="60" height="60" rx="15" fill="#1769AA"/>
+
+  <!-- Escudo simplificado: proteção -->
+  <path
+    d="M32 8
+       L50 15
+       V29
+       C50 41 43 50 32 56
+       C21 50 14 41 14 29
+       V15
+       Z"
+    fill="#FFFFFF"/>
+
+  <!-- Letra D: identidade do DerlyHelp -->
+  <path
+    d="M26 18
+       H32
+       C40 18 44 23 44 32
+       C44 41 40 46 32 46
+       H26
+       Z
+       M31 23
+       V41
+       H32
+       C36.5 41 39 38 39 32
+       C39 26 36.5 23 32 23
+       Z"
+    fill="#1769AA"/>
+
+  <!-- Coração: cuidado e acolhimento -->
+  <path
+    d="M43 37
+       C40.8 34.7 37 36.1 37 39.2
+       C37 42.7 43 46.4 43 46.4
+       C43 46.4 49 42.7 49 39.2
+       C49 36.1 45.2 34.7 43 37
+       Z"
+    fill="#64B58A"/>
+
+  <!-- Pequeno ponto de destaque: simplicidade e proximidade -->
+  <circle cx="20" cy="20" r="3" fill="#64B58A"/>
+
+</svg>
